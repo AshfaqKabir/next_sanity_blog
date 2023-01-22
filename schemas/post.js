@@ -9,6 +9,12 @@ const post = {
       type: "string",
     },
     {
+      name: "author",
+      title: "Author",
+      type: "reference",
+      to: [{ type: "author" }],
+    },
+    {
       name: "slug",
       title: "Slug",
       type: "slug",
