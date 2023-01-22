@@ -6,6 +6,22 @@ import { Heading, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 // import RichTextComponents from "../../components/RichTextComponents";
 
+export async function getStaticProps({ params: { slug } }) {
+  const query = groq`
+    *[_type == "post" && slug.current == '${slug}'][0]
+  `;
+
+  const post = await client.fetch(query);
+
+  return {
+    props: {
+      post,
+    },
+    revalidate: 10, // In seconds
+  };
+}
+
+
 export async function getStaticPaths() {
   const query = groq`
     *[_type == "post"]{
@@ -74,20 +90,6 @@ const RichTextComponents = {
     ),
   },
 };
-
-export async function getStaticProps({ params: { slug } }) {
-  const query = groq`
-    *[_type == "post" && slug.current == '${slug}'][0]
-  `;
-
-  const post = await client.fetch(query);
-
-  return {
-    props: {
-      post,
-    },
-  };
-}
 
 export const Post = ({ post }) => {
   // console.log(post);
